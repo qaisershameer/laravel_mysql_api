@@ -1,0 +1,23 @@
+1. Customer Review System
+2. Ticketing System
+3. Hostel Management System
+	Biometric Offline / Online
+	https://hms.jadeedmunshi.com/login
+4. Jadeed Finance (POS)
+	Company / Branch Wise
+	Distribution
+	Manufacturing
+	http://one.jadeedmunshi.com/
+5. Jadeed EMS (Education Managment System)
+	Branch Wise
+	Android App 
+	Student Parent Cordinator Login
+	https://college.jadeedmunshi.com/
+6. Jadeed Workshop
+	Job Management System
+7. Sales System
+	For Marketing Supevisors
+	Team Leaders Management
+8. Q-Metic System
+	https://qms.softagics.com/
+9. Jadeed Munshi Desktop App

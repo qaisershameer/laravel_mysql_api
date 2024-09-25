@@ -1,0 +1,35 @@
+Folder 3 - Video 24
+------------------------
+void main() {
+  runApp(
+    const MaterialApp(
+       home: Center(
+         child: Text('I Am Rich'),
+       ),
+  ),
+  );
+}
+
+----------------------------------
+Folder 3 - video 26
+
+import 'package:flutter/material.dart';
+import 'screen.dart';
+
+void main() {
+  MaterialApp(
+    // home: TestScreen(), //Scaffold
+    home: Scaffold(
+      backgroundColor: Colors.blueGrey,
+      appBar: AppBar(
+        title: Center(child: Text("Qaisar" )),
+      ),
+      body: Center(
+          child: Image(
+              image: NetworkImage(
+                  'https://qrdevteam.wordpress.com/wp-content/uploads/2012/05/qaiser20121.jpg'))),
+    ),
+    debugShowCheckedModeBanner: false, //Removing Debug Banner
+  ); //MaterialApp
+}
+

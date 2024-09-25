@@ -1,0 +1,14 @@
+	Admin App
+	Cashbook
+	  SAR Auto
+	  Display today SAR on load
+	Ledger
+	  SAR Auto
+	  SAR Columns Filter Set	
+	  finish auto load record on load.
+	Trial
+	  SAR Auto
+	  SAR Columns Filter Set
+	Home
+	  Set Home Screen Like DiGi Khata
+	  Customer / Supplier / Banks / ALL

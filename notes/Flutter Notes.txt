@@ -1,0 +1,88 @@
+flutter Grocery App
+============================================
+https://www.youtube.com/watch?v=uSljGJGSl6w
+
+flutter hive local database
+============================================
+https://www.youtube.com/watch?v=FB9GpmL0Qe0
+
+flutter phone Authentication
+============================================
+https://www.youtube.com/watch?v=Xe30neH4ppE
+https://www.youtube.com/watch?v=XW_I1YzVfKc
+
+
+flutter chat App 2024
+============================================
+https://www.youtube.com/watch?v=k7gM7OIZf0Y
+01:43 PM 27-Jul-24	17:00:00 watched.
+01:40 PM 29-Jul-24	23:23:00 wathced.
+01:52 PM 30-Jul-24	26:25:00 watched.
+01:40 PM 31-Jul-24	45:25:00 watched.
+01:40 PM 01-Aug-24	01:06:24 watched.
+
+
+===========================================================
+
+10:58 AM 11-Jul-24	F#15 	V # 176
+------------------------------------------------------
+Fluttr Sequence Animations	pubspec.yaml
+rubber				//			 	
+sprung				//
+
+animated_text_kit		//
+  TypewriterAnimatedText
+
+  Rounded_Button requried Function()
+
+01:03 PM 11-Jul-24	F#15	V-177
+------------------------------------------------------
+Refactoring Done
+
+10:57 AM 13-Jul-24	F#15	V-178
+------------------------------------------------------
+Creating A New Firebase Project video have to Start
+
+11:10 AM 13-Jul-24	F#15	V-180
+------------------------------------------------------
+180 - Android Firebase Project Setup
+  FireStore	Click on Android Icon
+  
+  https://console.firebase.google.com/project/flashchat7861/overview
+  
+  here flashchat7861 is our project id in google firestore console
+
+  Download google-service.json file, paste this file in app folder root
+      
+  dependencies {
+        id("com.google.gms.google-services") version "4.4.2" apply false
+   }  
+
+video link firebase	
+https://www.youtube.com/watch?v=k8C6OdMPC4c
+
+buildscript {
+	ext.kotlin_version = '1.7.10'
+	repositories {
+		google()
+		mavenCentral()
+	}
+	dependencies {
+		classpath = "org.jetbrains.kotlin:kotlin-gridle-plugin:$kotlin_version"
+		classpath = "com.google.gms:google-services:4.4.2"
+		}
+}
+
+-------------------------------------------------------------------
+
+flutter e-commerce App Tutorial
+https://www.youtube.com/watch?v=f5PKEs7UmM8&list=PLJerqUbx8GzomSKp-fZ6N_cMw9w5XRy0U&index=5
+
+flutter bootcamp course in Urdu
+https://www.youtube.com/playlist?list=PLGJPpb8f27YY-gBqVlUbWNz3Eo5IplFlT
+
+fluter WhatsApp UI
+https://www.youtube.com/watch?v=4-oCmX-gBUs&list=PLFyjjoCMAPtxq8V9fuVmgsYKLNIKqSEV4&index=18
+
+
+

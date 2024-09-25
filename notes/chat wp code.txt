@@ -1,0 +1,227 @@
+login_page.dart
+==============================
+import 'package:chat_wp/components/my_button.dart';
+import 'package:chat_wp/components/my_textfield.dart';
+import 'package:flutter/material.dart';
+
+class LoginPage extends StatelessWidget {
+  // email & password text controllers
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _pwdController = TextEditingController();
+
+  // tap to go to register page
+  final void Function()? onTap;
+
+  LoginPage({super.key, required this.onTap});
+
+  // login Method
+  void login() {
+    // functionality will added later
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // logo
+            Icon(
+              Icons.message,
+              size: 60.0,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+
+            const SizedBox(height: 50.0),
+
+            // welcome back message
+            Text(
+              'Welcome back! you have been missed.',
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.primary,
+                fontSize: 18.0,
+              ),
+            ),
+
+            const SizedBox(height: 25.0),
+
+            // email textfield
+            MyTextField(
+              hintText: 'Email',
+              obsecureText: false,
+              controller: _emailController,
+            ),
+
+            const SizedBox(height: 10.0),
+
+            // pwd textfield
+            MyTextField(
+              hintText: 'Password',
+              obsecureText: true,
+              controller: _pwdController,
+            ),
+
+            const SizedBox(height: 25.0),
+
+            // login button
+            MyButton(
+              onTap: login,
+              text: 'Login',
+            ),
+
+            const SizedBox(height: 25.0),
+
+            // register now
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Not a Member? ',
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.primary),
+                ),
+                GestureDetector(
+                    onTap: onTap,
+                    child: Text(
+                      'Register Now.',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    )),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
+aut_service.dart
+==============================
+import 'package:firebase_auth/firebase_auth.dart';
+
+class AuthService {
+  // instance of auth
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  // sign in
+  Future<UserCredential> signIn
+
+  // sing up
+
+  // sign out
+
+  // errors
+
+}
+
+login_or_register.dart
+=======================
+import 'package:chat_wp/pages/login_page.dart';
+import 'package:chat_wp/pages/register_page.dart';
+import 'package:flutter/material.dart';
+
+class LoginOrRegister extends StatefulWidget {
+  const LoginOrRegister({super.key});
+
+  @override
+  State<LoginOrRegister> createState() => _LoginOrRegisterState();
+}
+
+class _LoginOrRegisterState extends State<LoginOrRegister> {
+  // initially show the login page
+  bool showLoginPage = true;
+
+  // toggle between login or register pages
+  void togglePages(){
+    setState(() {
+      showLoginPage = !showLoginPage;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (showLoginPage) {
+      return LoginPage(onTap: togglePages,);
+    } else
+      {
+        return RegisterPage(onTap: togglePages,);
+      }
+  }
+}
+
+my_button.dart
+=================
+import 'package:flutter/material.dart';
+
+class MyButton extends StatelessWidget {
+
+  final void Function()? onTap;
+  final String text;
+
+  const MyButton({
+    super.key,
+    required this.onTap,
+    required this.text,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.secondary,
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        padding: const EdgeInsets.all(25.0),
+        margin: const EdgeInsets.symmetric(horizontal: 25.0),
+        child: Center(
+          child: Text(text),
+        ),
+      ),
+    );
+  }
+}
+
+
+auth_service.dart
+==================
+import 'package:firebase_auth/firebase_auth.dart';
+
+class AuthService {
+  // instance of auth
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  // sign in
+  Future<UserCredential> signIn
+
+  // sing up
+
+  // sign out
+
+  // errors
+
+}
+
+
+=============================
+chat_service.dart
+
+  // GET ALL USERS STREAM
+  Stream<List<Map<String, dynamic>>> getUsersStream() {
+    return _firestore.collection('Users').snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) {
+        // go through each individual user
+        final user = doc.data();
+
+        // return user
+        return user;
+      }).toList();
+    });
+  }
