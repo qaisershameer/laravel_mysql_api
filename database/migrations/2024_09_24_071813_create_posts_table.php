@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('posts', function (Blueprint $table) {
-            $table->id();
-            $table->string('title');
+            $table->id('postId');
+            $table->string('postTitle');
             $table->text('description');
             $table->string('image'); // Use string for image path or URL
             $table->timestamps();

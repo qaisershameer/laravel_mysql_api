@@ -1,0 +1,123 @@
+*For Desktop App*
+Visual Basic 6.0, Crystal Reports, VB.Net, C#
+
+*Android App*
+Flutter, Dart
+
+*Web App*
+Wordpress Customization, PHP Project Base, Laravel Project Base
+
+*Database Working*
+SQL Server, MySQL, Firebase, Hive,
+
+VS Code 
+======================================================== Laravel Extensions
+
+PHP IntelliSense
+Damjan Cvetko
+
+PHP Namespace Resolver
+Mehedi Hassan
+
+Laravel Extra Intellisense
+amir
+
+laravel-blade
+Christian Howe
+
+Laravel Blade Snippets
+Winnie Lin
+
+Laravel goto view
+codingyu
+
+======================================================== Laravel Packages
+
+ Sanctum	simplified db / api structure
+ 
+ Passport	complex db / api structure
+
+======================================================== Laravel Folder & File Structure
+
+  1. Model Folder	-> Database / SQL Queries Handling Files
+
+  2. Controller Folder	-> Business Logic Files
+
+  3. View Folder	-> HTML Files
+
+  4. Routing Folder	-> URL Defining Files
+
+  5. Assets Folder	-> Images / Fonts / Music / Videos Files
+     (Public Folder)	   (CSS / JavaScript Files)	
+
+======================================================== Laravel Commands
+
+MVC	Model View Controller
+
+php artisan serve						start php server in larvel to get working
+
+php artisan make:controller AccountsController --resource	create controller with full resource
+
+php artisan make:model Accounts -m				create model with migrate option
+
+php artisan make:model Accounts					create model only
+
+php artisan migrate						migrate existing created model
+
+======================================================== Laravel Commands API - > Project Starting sanctum-api down...
+
+// open cmd in xampp htdocs file location and run below command
+
+laravel new sanctum-api				// create new laravel project
+
+// open folder sanctum-api in VS Code run following commands
+
+php artisan make:migration create_posts_table	// this will create post table migration file make changes in migration file
+
+php artisan install:api				// this will install sanctum package in our project
+
+use Laravel\Sanctum\HasApiTokens;		// add packages dependency in User Models side
+
+php artisan make:controller API/AuthController	// create auth controller for user signup -> login -> logout 
+
+php artisan make:mode Post -m			// make model file for Post table
+
+php artisan make:controller API/PostController --api		// maiking API resource controller for Post Table
+
+
+php artisan serve				// starting server
+
+php artisan route:list				// to view list of all routes
+
+php artisan make:controller API/BaseController	// create Base Controller for user Errors Responses on Single File
+
+php artisan make:migration			// will create all tables in database if not exist already.
+
+php artisan cache:clear				// clear Cache
+
+php artisan config:cache			// configure Cache
+
+php artisan make:controller API/CuurencyController --api 	// maiking API resource controller for Cuurency Table
+
+php artisan make:controller API/AreaController --api 		// maiking API resource controller for Area Table
+
+php artisan make:controller API/AccTypeController --api 	// maiking API resource controller for AccType Table
+
+php artisan make:controller API/AccParentController --api 	// maiking API resource controller for AccParent Table
+
+php artisan make:controller API/AccountsController --api 	// maiking API resource controller for Accounts Table
+
+php artisan make:controller API/VouchersController --api 	// maiking API resource controller for Vouchers Table
+
+php artisan make:controller API/VouchersDetailController --api 	// maiking API resource controller for VouchersDetail Table
+
+
+
+==============================================================================	CHECK API On Post man
+
+http://127.0.0.1:8000/api/signup	name:	qaiser	email: qaiser@gmail.com		password: 12345678
+
+http://127.0.0.1:8000/api/login				email: qaiser@gmail.com		password: 12345678
+
+http://127.0.0.1:8000/api/logout	login token:	1|GFDaRTGuOEKbTlq2I9zxiQuQs3awzWjIRGjGBu84069e4275
+
