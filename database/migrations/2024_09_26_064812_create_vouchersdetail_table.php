@@ -12,17 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('vouchersDetail', function (Blueprint $table) {
-            $table->bigIncrements('voucherDtid');
+            $table->id('voucherDtid');
 
             $table->unsignedBigInteger('voucherId');
             // Add the foreign key constraint with restrict on delete
             $table->foreign('voucherId')->references('voucherId')->on('vouchers')->onDelete('restrict'); // Prevent deletion if foreign key exists
 
-            $table->unsignedSmallInteger('uId');
+            $table->unsignedBigInteger('uId');
             // Add the foreign key constraint with restrict on delete
-            $table->foreign('uId')->references('uId')->on('users')->onDelete('restrict'); // Prevent deletion if foreign key exists
+            $table->foreign('uId')->references('id')->on('users')->onDelete('restrict'); // Prevent deletion if foreign key exists
 
-            $table->unsignedSmallInteger('acId');
+            $table->unsignedBigInteger('acId');
             // Add the foreign key constraint with restrict on delete
             $table->foreign('acId')->references('acId')->on('accounts')->onDelete('restrict'); // Prevent deletion if foreign key exists            
 

@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class currency extends Model
+class Currency extends Model
 {
     use HasFactory;
-    
+    protected $table='currency';
+    protected $primaryKey ='currencyId';
+
     protected $fillable = [
         'currencyTitle', 'uId'
     ];    

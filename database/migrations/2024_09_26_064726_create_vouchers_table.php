@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('vouchers', function (Blueprint $table) {
-            $table->bigIncrements('voucherId');
+            $table->id('voucherId');
             $table->date('voucherDate');
             $table->string('voucherPrefix');
             $table->text('remarksMaster');
@@ -23,9 +23,9 @@ return new class extends Migration
             $table->double('sumDebitSR')->default(0);
             $table->double('sumCreditSR')->default(0);
             
-            $table->unsignedSmallInteger('uId');
+            $table->unsignedBigInteger('uId');
             // Add the foreign key constraint with restrict on delete
-            $table->foreign('uId')->references('uId')->on('users')->onDelete('restrict'); // Prevent deletion if foreign key exists
+            $table->foreign('uId')->references('id')->on('users')->onDelete('restrict'); // Prevent deletion if foreign key exists
 
             $table->timestamps();
         });

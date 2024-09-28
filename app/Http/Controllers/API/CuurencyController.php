@@ -28,17 +28,19 @@ class CuurencyController extends BaseController
         $validateCurrency = Validator::make(
             $request->all(),
             [
-                'CurrencyTitle' => 'required',
+                'currencyTitle' => 'required',
                 'uId' => 'required',
             ]
         );
+        // return $validateCurrency;
 
         if ($validateCurrency->fails()) {
             return $this->sendError('Validation Error', $validateCurrency->errors()->all());
         }
 
+     
         $post = Currency::create([
-            'CurrencyTitle' => $request->title,
+            'currencyTitle' => $request->currencyTitle,
             'uId' => $request->uId,            
         ]);
 
@@ -67,10 +69,11 @@ class CuurencyController extends BaseController
      */
     public function update(Request $request, string $id)
     {
+       
         $validateCurrency = Validator::make(
             $request->all(),
             [
-                'CurrencyTitle' => 'required',
+                'currencyTitle' => 'required',
                 'uId' => 'required',
             ]
         );
@@ -79,11 +82,11 @@ class CuurencyController extends BaseController
             return $this->sendError('Validation Error', $validateCurrency->errors()->all());
         }
 
-        $post = Curency::where(['currencyId' => $id])->update([
-            'currencyTitle' => $request->title,
-            'uId' => $request->description,            
+        $data = Currency::where(['currencyId' => $id])->update([
+            'currencyTitle' => $request->currencyTitle,
+            'uId' => $request->uId,            
         ]);
-
+        return $this->sendResponse($data, 'Currency Updated');
     }
 
     /**

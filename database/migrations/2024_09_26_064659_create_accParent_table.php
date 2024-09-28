@@ -12,16 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('accParent', function (Blueprint $table) {
-            $table->increments('parentId');
+            $table->id('parentId');
             $table->string('accParentTitle');
 
-            $table->unsignedSmallInteger('accTypeId');
+            $table->unsignedBigInteger('accTypeId');
             // Add the foreign key constraint Account Type Id
             $table->foreign('accTypeId')->references('accTypeId')->on('accType')->onDelete('restrict'); // Prevent deletion if foreign key exists
 
-            $table->unsignedSmallInteger('uId');
+            $table->unsignedBigInteger('uId');
             // Add the foreign key constraint with restrict on delete
-            $table->foreign('uId')->references('uId')->on('users')->onDelete('restrict'); // Prevent deletion if foreign key exists
+            $table->foreign('uId')->references('id')->on('users')->onDelete('restrict'); // Prevent deletion if foreign key exists
                                     
             $table->timestamps();
         });

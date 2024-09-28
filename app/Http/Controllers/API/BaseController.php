@@ -29,7 +29,7 @@ class BaseController extends Controller
             $response['data'] = $errorMessage;
         }
 
-        return response()->json($response, $code01);
+        return response()->json($response, $code);
         
     }
 

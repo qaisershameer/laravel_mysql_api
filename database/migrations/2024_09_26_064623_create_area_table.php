@@ -12,15 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('area', function (Blueprint $table) {
-            $table->increments('areaId');
+            $table->id('areaId');
             $table->string('areaTitle');
-            $table->unsignedSmallInteger('uId');
-            
-            // Add the foreign key constraint
-            // $table->foreign('uId')->references('uId')->on('users')->onDelete('cascade');
+            $table->unsignedBigInteger('uId'); // Rename the foreign key column to avoid conflict
+    
+            // Foreign key constraint
+            $table->foreign('uId')->references('id')->on('users')->onDelete('restrict'); // Prevent deletion if foreign key exists
 
-            // Add the foreign key constraint with restrict on delete
-            $table->foreign('uId')->references('uId')->on('users')->onDelete('restrict'); // Prevent deletion if foreign key exists
 
             $table->timestamps();
         });

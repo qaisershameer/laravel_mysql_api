@@ -12,18 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('currency', function (Blueprint $table) {
-            $table->increments('currencyId');
+            $table->id('currencyId'); // Primary key
             $table->string('currencyTitle');
-            $table->unsignedSmallInteger('uId');
-            
-            // Add the foreign key constraint
-            // $table->foreign('uId')->references('uId')->on('users')->onDelete('cascade');
-            
-            // Add the foreign key constraint with restrict on delete
-            $table->foreign('uId')->references('uId')->on('users')->onDelete('restrict'); // Prevent deletion if foreign key exists
-
+            $table->unsignedBigInteger('uId'); // Foreign key column
+        
+            // Foreign key constraint
+            $table->foreign('uId')->references('id')->on('users')->onDelete('restrict'); // Prevent deletion if foreign key exists
+        
             $table->timestamps();
         });
+        
+        
     }
 
     /**
@@ -31,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('curcurrencyrencies');
+        Schema::dropIfExists('currency');
     }
 };

@@ -12,15 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('accType', function (Blueprint $table) {
-            $table->increments('accTypeId');
+            $table->id('accTypeId');
             $table->string('accTypeTitle');
-            $table->unsignedSmallInteger('uId');
+            $table->unsignedBigInteger('uId');
 
             // Add the foreign key constraint
             // $table->foreign('uId')->references('uId')->on('users')->onDelete('cascade');
 
             // Add the foreign key constraint with restrict on delete
-            $table->foreign('uId')->references('uId')->on('users')->onDelete('restrict'); // Prevent deletion if foreign key exists
+            $table->foreign('uId')->references('id')->on('users')->onDelete('restrict'); // Prevent deletion if foreign key exists
 
             $table->timestamps();
         });

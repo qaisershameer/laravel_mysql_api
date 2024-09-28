@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('accounts', function (Blueprint $table) {
-            $table->increments('acId');
+            $table->id('acId');
             $table->string('acTitle');
             $table->string('email');
             $table->string('mobile');
@@ -20,26 +20,26 @@ return new class extends Migration
             $table->double('openingBal')->default(0);
             $table->double('CurrentBal')->default(0);
 
-            $table->id('uId');
+            $table->unsignedBigInteger('uId');
             // Add the foreign key constraint User Id
             // $table->foreign('uId')->references('uId')->on('users')->onDelete('cascade');
 
             // Add the foreign key constraint with restrict on delete
-            $table->foreign('uId')->references('uId')->on('users')->onDelete('restrict'); // Prevent deletion if foreign key exists
+            $table->foreign('uId')->references('id')->on('users')->onDelete('restrict'); // Prevent deletion if foreign key exists
 
-            $table->unsignedSmallInteger('currencyId');
+            $table->unsignedBigInteger('currencyId');
             // Add the foreign key constraint Currency Id
             $table->foreign('currencyId')->references('currencyId')->on('currency')->onDelete('restrict'); // Prevent deletion if foreign key exists
 
-            $table->unsignedSmallInteger('accTypeId');
+            $table->unsignedBigInteger('accTypeId');
             // Add the foreign key constraint Account Type Id
             $table->foreign('accTypeId')->references('accTypeId')->on('accType')->onDelete('restrict'); // Prevent deletion if foreign key exists
 
-            $table->unsignedSmallInteger('parentId');
+            $table->unsignedBigInteger('parentId');
             // Add the foreign key constraint Parent Account Id
             $table->foreign('parentId')->references('parentId')->on('accParent')->onDelete('restrict'); // Prevent deletion if foreign key exists
 
-            $table->unsignedSmallInteger('areaId')->nullable(); // Make uId nullable
+            $table->unsignedBigInteger('areaId')->nullable(); // Make uId nullable
             // Add the foreign key constraint Area Id
             $table->foreign('areaId')->references('areaId')->on('area')->onDelete('restrict'); // Prevent deletion if foreign key exists
 
