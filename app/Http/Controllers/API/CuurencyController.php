@@ -16,7 +16,7 @@ class CuurencyController extends BaseController
      */
     public function index()
     {
-        $data['currency'] = Post::all();        
+        $data['currency'] = Currency::all();        
         return $this->sendResponse($data, 'All Currency Data');
     }
 
@@ -39,12 +39,12 @@ class CuurencyController extends BaseController
         }
 
      
-        $post = Currency::create([
+        $data = Currency::create([
             'currencyTitle' => $request->currencyTitle,
             'uId' => $request->uId,            
         ]);
 
-        return $this->sendResponse($post, 'Currency Created Successfully');
+        return $this->sendResponse($data, 'Currency Created Successfully');
     }
 
     /**
@@ -86,7 +86,7 @@ class CuurencyController extends BaseController
             'currencyTitle' => $request->currencyTitle,
             'uId' => $request->uId,            
         ]);
-        return $this->sendResponse($data, 'Currency Updated');
+        return $this->sendResponse($data, 'Currency Updated Successfully');
     }
 
     /**
@@ -94,8 +94,8 @@ class CuurencyController extends BaseController
      */
     public function destroy(string $id)
     {
-        $post = Currency::where('currencyId', $id)->delete();
+        $data = Currency::where('currencyId', $id)->delete();
 
-        return $this->sendResponse($post, 'Currency Deleted Successfully');
+        return $this->sendResponse($data, 'Currency Deleted Successfully');
     }
 }

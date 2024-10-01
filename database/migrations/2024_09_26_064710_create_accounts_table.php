@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('accounts', function (Blueprint $table) {
             $table->id('acId');
             $table->string('acTitle');
-            $table->string('email');
-            $table->string('mobile');
+            $table->string('email')->nullable(); // Make email nullable;
+            $table->string('mobile')->nullable(); // Make email nullable;
 
             $table->double('openingBal')->default(0);
             $table->double('CurrentBal')->default(0);
@@ -39,7 +39,7 @@ return new class extends Migration
             // Add the foreign key constraint Parent Account Id
             $table->foreign('parentId')->references('parentId')->on('accParent')->onDelete('restrict'); // Prevent deletion if foreign key exists
 
-            $table->unsignedBigInteger('areaId')->nullable(); // Make uId nullable
+            $table->unsignedBigInteger('areaId')->nullable(); // Make areaId nullable;
             // Add the foreign key constraint Area Id
             $table->foreign('areaId')->references('areaId')->on('area')->onDelete('restrict'); // Prevent deletion if foreign key exists
 

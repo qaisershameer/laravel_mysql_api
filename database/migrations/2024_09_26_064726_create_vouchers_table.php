@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('voucherId');
             $table->date('voucherDate');
             $table->string('voucherPrefix');
-            $table->text('remarksMaster');
+            $table->text('remarksMaster')->nullable(); // Make email nullable;
 
             $table->double('sumDebit')->default(0);
             $table->double('sumCredit')->default(0);
