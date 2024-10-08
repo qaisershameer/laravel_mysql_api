@@ -14,10 +14,13 @@ class AccountsController extends BaseController
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data['accounts'] = Accounts::all();        
-        return $this->sendResponse($data, 'All Accounts Data');
+        $uId = $request->uId;
+        $data['accounts'] = Accounts::where('uId', $uId)
+                                ->orderBy('acTitle')
+                                ->get();        
+    return $this->sendResponse($data, 'All Accounts Data');       
     }
 
     /**
