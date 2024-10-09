@@ -14,7 +14,7 @@ class CuurencyController extends BaseController
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $data['currency'] = Currency::all();        
         return $this->sendResponse($data, 'All Currency Data');
