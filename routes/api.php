@@ -2,8 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\API\AreaController;
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\AreaController;
 use App\Http\Controllers\API\PostController;
 use App\Http\Controllers\API\AccTypeController;
 use App\Http\Controllers\API\AccountsController;

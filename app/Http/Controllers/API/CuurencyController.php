@@ -16,8 +16,15 @@ class CuurencyController extends BaseController
      */
     public function index(Request $request)
     {
-        $data['currency'] = Currency::all();        
-        return $this->sendResponse($data, 'All Currency Data');
+
+        $uId = $request->uId;
+        $data['currency'] = Currency::where('uId', $uId)
+                                ->orderBy('currencyTitle')
+                                ->get();
+        return $this->sendResponse($data, 'All Currency Data'); 
+
+        // $data['currency'] = Currency::all();        
+        // return $this->sendResponse($data, 'All Currency Data');
     }
 
     /**

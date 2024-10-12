@@ -14,9 +14,12 @@ class AreaController extends BaseController
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data['area'] = Area::all();        
+        $uId = $request->uId;
+        $data['area'] = Area::where('uId', $uId)
+                                ->orderBy('areaTitle')
+                                ->get();
         return $this->sendResponse($data, 'All Area Data');
     }
 

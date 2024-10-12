@@ -14,10 +14,13 @@ class AccTypeController extends BaseController
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data['accType'] = AccType::all();        
-        return $this->sendResponse($data, 'All Account Type Data');
+        $uId = $request->uId;
+        $data['accType'] = AccType::where('uId', $uId)
+                                ->orderBy('accTypeId')
+                                ->get();        
+        return $this->sendResponse($data, 'All Account Type Data');        
     }
 
     /**
@@ -86,7 +89,7 @@ class AccTypeController extends BaseController
             'accTypeTitle' => $request->accTypeTitle,
             'uId' => $request->uId,            
         ]);
-        return $this->sendResponse($data, 'AccType Updated Successfully');
+        return $this->sendResponse($data, 'Account Type Updated Successfully');
     }
 
     /**

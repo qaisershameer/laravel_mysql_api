@@ -14,10 +14,15 @@ class AccParentController extends BaseController
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data['accParent'] = accParent::all();        
-        return $this->sendResponse($data, 'All account Parent Data');
+
+        $uId = $request->uId;
+        $data['accParent'] = AccParent::where('uId', $uId)
+                                ->orderBy('accParentTitle')
+                                ->get();        
+        return $this->sendResponse($data, 'All Parent Account Data');  
+        
     }
 
     /**
@@ -39,7 +44,6 @@ class AccParentController extends BaseController
             return $this->sendError('Validation Error', $validateaccParent->errors()->all());
         }
 
-     
         $data = AccParent::create([
             'accParentTitle' => $request->accParentTitle,
             'accTypeId' => $request->accTypeId,
