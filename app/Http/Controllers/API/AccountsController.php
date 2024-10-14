@@ -46,6 +46,8 @@ class AccountsController extends BaseController
 
         $data = Accounts::create([
             'acTitle' => $request->acTitle,
+            'email' => $request->email,
+            'mobile' => $request->mobile,
             'uId' => $request->uId, 
             'currencyId' => $request->currencyId,
             'accTypeId' => $request->accTypeId,
