@@ -98,6 +98,8 @@ class AccountsController extends BaseController
 
         $data = Accounts::where(['acId' => $id])->update([
             'acTitle' => $request->acTitle,
+            'email' => $request->email,
+            'mobile' => $request->mobile,
             'uId' => $request->uId,
             'currencyId' => $request->currencyId,
             'accTypeId' => $request->accTypeId,
