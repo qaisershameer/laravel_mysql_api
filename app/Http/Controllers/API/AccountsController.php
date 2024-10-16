@@ -17,10 +17,23 @@ class AccountsController extends BaseController
     public function index(Request $request)
     {
         $uId = $request->uId;
-        $data['accounts'] = Accounts::where('uId', $uId)
-                                ->orderBy('acTitle')
-                                ->get();        
-    return $this->sendResponse($data, 'All Accounts Data');       
+
+        // $data['accounts'] = Accounts::where('uId', $uId)
+        //                         ->orderBy('acTitle')
+        //                         ->get();
+
+        $data['accounts'] = Accounts::select('accounts.*', 
+                                            'accType.accTypeTitle', 
+                                            'currency.currencyTitle', 
+                                            'accParent.accParentTitle')
+                                        ->join('currency', 'accounts.currencyId', '=', 'currency.currencyId')
+                                        ->join('accType', 'accounts.accTypeID', '=', 'accType.accTypeId')                                        
+                                        ->join('accParent', 'accounts.parentId', '=', 'accParent.parentId')
+                                        ->where('accounts.uId', $uId)
+                                        ->orderBy('accounts.acTitle')
+                                        ->get();
+
+        return $this->sendResponse($data, 'All Accounts Data');
     }
 
     /**
