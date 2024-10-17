@@ -25,11 +25,14 @@ class AccountsController extends BaseController
         $data['accounts'] = Accounts::select('accounts.*', 
                                             'accType.accTypeTitle', 
                                             'currency.currencyTitle', 
-                                            'accParent.accParentTitle')
+                                            'accParent.accParentTitle',
+                                            'area.areaTitle')
                                         ->join('currency', 'accounts.currencyId', '=', 'currency.currencyId')
                                         ->join('accType', 'accounts.accTypeID', '=', 'accType.accTypeId')                                        
                                         ->join('accParent', 'accounts.parentId', '=', 'accParent.parentId')
+                                        ->join('area', 'accounts.areaId', '=', 'area.areaId')
                                         ->where('accounts.uId', $uId)
+                                        ->orderBy('accType.accTypeTitle')
                                         ->orderBy('accounts.acTitle')
                                         ->get();
 

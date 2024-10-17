@@ -14,9 +14,26 @@ class VouchersController extends BaseController
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data['vouchers'] = Vouchers::all();        
+        $uId = $request->uId;
+        $voucherPrefix = $request->voucherPrefix;
+
+        $data['vouchers'] = Vouchers::select('vouchers.*', 
+                                            'vouchersdetail.remarksDetail',
+                                            'vouchersdetail.debit', 
+                                            'vouchersdetail.credit',
+                                            'vouchersdetail.debitSR',
+                                            'vouchersdetail.creditSR',
+                                            'vouchersdetail.acId',
+                                            'accounts.acTitle')
+                                        ->join('vouchersdetail', 'vouchers.voucherId', '=', 'vouchersdetail.voucherId')
+                                        ->join('accounts', 'vouchersdetail.acId', '=', 'accounts.accId')                                        
+                                        ->where('vouchers.uId', $uId)
+                                        ->where('vouchers.voucherPrefix', $voucherPrefix)
+                                        ->orderBy('vouchers.voucherDate')
+                                        ->get();
+            
         return $this->sendResponse($data, 'All Vouchers Data');
     }
 
