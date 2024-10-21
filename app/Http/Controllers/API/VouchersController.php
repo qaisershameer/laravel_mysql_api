@@ -19,7 +19,15 @@ class VouchersController extends BaseController
         $uId = $request->uId;
         $voucherPrefix = $request->voucherPrefix;
 
-        $data['vouchers'] = Vouchers::select('vouchers.*', 
+        $data['vouchers'] = Vouchers::select('vouchers.voucherId',
+                                            'vouchers.voucherDate',
+                                            'vouchers.voucherPrefix',
+                                            'vouchers.remarksMaster',
+                                            'vouchers.sumDebit',
+                                            'vouchers.sumCredit',
+                                            'vouchers.sumDebitSR',
+                                            'vouchers.sumCreditSR',
+                                            'vouchers.uId',
                                             'vouchersdetail.remarksDetail',
                                             'vouchersdetail.debit', 
                                             'vouchersdetail.credit',
@@ -27,8 +35,8 @@ class VouchersController extends BaseController
                                             'vouchersdetail.creditSR',
                                             'vouchersdetail.acId',
                                             'accounts.acTitle')
-                                        ->join('vouchersdetail', 'vouchers.voucherId', '=', 'vouchersdetail.voucherId')
-                                        ->join('accounts', 'vouchersdetail.acId', '=', 'accounts.accId')                                        
+                                        ->leftJoin('vouchersdetail', 'vouchers.voucherId', '=', 'vouchersdetail.voucherId')
+                                        ->leftJoin('accounts', 'vouchersdetail.acId', '=', 'accounts.acId')
                                         ->where('vouchers.uId', $uId)
                                         ->where('vouchers.voucherPrefix', $voucherPrefix)
                                         ->orderBy('vouchers.voucherDate')
@@ -47,6 +55,7 @@ class VouchersController extends BaseController
             [
                 'voucherDate' => 'required',
                 'voucherPrefix' => 'required',
+                'acId' => 'required',
                 'uId' => 'required',
             ]
         );
