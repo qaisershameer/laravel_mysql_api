@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use Carbon\Carbon;
 use App\Models\Vouchers;                        // change this and below all lines
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -40,6 +41,7 @@ class VouchersController extends BaseController
                                         ->where('vouchers.uId', $uId)
                                         ->where('vouchers.voucherPrefix', $voucherPrefix)
                                         ->orderBy('vouchers.voucherDate')
+                                        ->orderBy('vouchers.updated_at')
                                         ->get();
             
         return $this->sendResponse($data, 'All Vouchers Data');
@@ -55,7 +57,6 @@ class VouchersController extends BaseController
             [
                 'voucherDate' => 'required',
                 'voucherPrefix' => 'required',
-                'acId' => 'required',
                 'uId' => 'required',
             ]
         );
@@ -65,18 +66,63 @@ class VouchersController extends BaseController
             return $this->sendError('Validation Error', $validateVouchers->errors()->all());
         }
 
-        $data = Vouchers::create([
-            'voucherDate' => $request->voucherDate,
-            'voucherPrefix' => $request->voucherPrefix,
-            'remarksMaster' => $request->remarksMaster,
-            'sumDebit' => $request->sumDebit,
-            'sumCredit' => $request->sumCredit,
-            'sumDebitSR' => $request->sumDebitSR,
-            'sumCreditSR' => $request->sumCreditSR,
-            'uId' => $request->uId,            
+        $voucherDate = $request->voucherDate; // Assuming you get this from the request        
+        $formattedDate = Carbon::createFromFormat('d-m-Y', $voucherDate)->format('Y-m-d'); // Convert to correct format
+        
+        $acId = ($request->voucherPrefix == 'CR') ? $request->crAcId : (($request->voucherPrefix == 'CP') ? $request->drAcId : null);
+
+        try {
+            $voucher = Vouchers::create([
+                'voucherDate' => $formattedDate,
+                'voucherPrefix' => $request->voucherPrefix,
+                'remarksMaster' => $request->remarksMaster,
+                'sumDebit' => $request->sumDebit,
+                'sumCredit' => $request->sumCredit,
+                'sumDebitSR' => $request->sumDebitSR,
+                'sumCreditSR' => $request->sumCreditSR,
+                'uId' => $request->uId,
+            ]);
+        } catch (\Exception $e) {
+            return $this->sendError('Database Error', $e->getMessage());
+        }
+    
+        if (!$voucher) {
+            return $this->sendError('Voucher not created.');
+        }
+
+        // Validate the detail data
+        $validateDetail = Validator::make(
+            $request->all(),
+            [
+                'uId' => 'required',
+                'drAcId' => 'nullable|numeric',
+                'crAcId' => 'nullable|numeric',                
+                'debit' => 'nullable|numeric',
+                'debitSR' => 'nullable|numeric',
+                'credit' => 'nullable|numeric',
+                'creditSR' => 'nullable|numeric',
+            ]
+        );        
+
+        if ($validateDetail->fails()) {
+            return $this->sendError('Validation Error', $validateDetail->errors()->all());
+        }
+
+
+         // Save the detail data
+            $detailData = VouchersDetail::create([
+            'voucherId' => $voucher->id, // Use the master ID
+            'uId' => $request->uId,
+            'acId' => $request->crAcId,
+            'remarksDetail' => $request->remarks,
+            'debit' => $request->debit,
+            'credit' => $request->credit,
+            'debitSR' => $request->debitSR,
+            'creditSR' => $request->creditSR,
         ]);
 
-        return $this->sendResponse($data, 'Vouchers Created Successfully');
+        // return $this->sendResponse($data, 'Vouchers Created Successfully');
+        return $this->sendResponse([$voucher, $detailData], 'Vouchers Created Successfully');
     }
 
     /**
@@ -94,7 +140,7 @@ class VouchersController extends BaseController
             ], 404);
         }
 
-        return $this->sendResponse($data, 'Your Single Vouchers');
+        return $this->sendResponse($data, 'Your Single Voucher Master Table');
     }
 
     /**
