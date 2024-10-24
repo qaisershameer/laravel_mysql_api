@@ -3,10 +3,15 @@
 namespace App\Http\Controllers\API;
 
 use Carbon\Carbon;
-use App\Models\Vouchers;                        // change this and below all lines
+use App\Models\Vouchers;                        
+use App\Models\VouchersDetail;                 
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+
 use App\Http\Controllers\API\BaseController as BaseController;
 
 
@@ -58,71 +63,73 @@ class VouchersController extends BaseController
                 'voucherDate' => 'required',
                 'voucherPrefix' => 'required',
                 'uId' => 'required',
+                // 'drAcId' => 'nullable|numeric',
+                // 'crAcId' => 'nullable|numeric',
             ]
         );
-        // return $validateVouchers;
 
         if ($validateVouchers->fails()) {
             return $this->sendError('Validation Error', $validateVouchers->errors()->all());
         }
 
-        $voucherDate = $request->voucherDate; // Assuming you get this from the request        
-        $formattedDate = Carbon::createFromFormat('d-m-Y', $voucherDate)->format('Y-m-d'); // Convert to correct format
+        $voucherDate = $request->voucherDate;        
+        // $formattedDate = Carbon::createFromFormat('d-m-Y', $voucherDate)->format('Y-m-d');
+        $formattedDate = Carbon::parse($request->voucherDate)->format('Y-m-d');
         
-        $acId = ($request->voucherPrefix == 'CR') ? $request->crAcId : (($request->voucherPrefix == 'CP') ? $request->drAcId : null);
-
+       DB::beginTransaction();
         try {
             $voucher = Vouchers::create([
                 'voucherDate' => $formattedDate,
                 'voucherPrefix' => $request->voucherPrefix,
-                'remarksMaster' => $request->remarksMaster,
-                'sumDebit' => $request->sumDebit,
-                'sumCredit' => $request->sumCredit,
-                'sumDebitSR' => $request->sumDebitSR,
-                'sumCreditSR' => $request->sumCreditSR,
+                'remarksMaster' => $request->remarks,
+                'sumDebit' => $request->debit,
+                'sumCredit' => $request->credit,
+                'sumDebitSR' => $request->debitSR,
+                'sumCreditSR' => $request->creditSR,
                 'uId' => $request->uId,
             ]);
+
+            // Check if the voucher was created successfully and has a valid ID
+            if (!$voucher || !$voucher->voucherId) {
+                DB::rollBack();
+                return $this->sendError('Voucher not created or ID is null.');
+            }
+
+            // Call the function to save voucher details
+            if($request->drAcId != 0){
+                $this->saveVoucherDetails($voucher->voucherId, $request->drAcId, $request, true);   // true for debit entry
+            }
+
+            if($request->crAcId != 0){
+                $this->saveVoucherDetails($voucher->voucherId, $request->crAcId, $request, false);  // false for credit entry
+            }
+            
+            // Retrieve the saved details
+            $voucherDetails = VouchersDetail::where('voucherId', $voucher->voucherId)->get();
+
+            DB::commit(); // Only commit if both succeed
+
+            return $this->sendResponse([$voucher, $voucherDetails], 'Voucher Created Successfully');            
+            
         } catch (\Exception $e) {
+            DB::rollBack();
             return $this->sendError('Database Error', $e->getMessage());
         }
-    
-        if (!$voucher) {
-            return $this->sendError('Voucher not created.');
-        }
+    }
 
-        // Validate the detail data
-        $validateDetail = Validator::make(
-            $request->all(),
-            [
-                'uId' => 'required',
-                'drAcId' => 'nullable|numeric',
-                'crAcId' => 'nullable|numeric',                
-                'debit' => 'nullable|numeric',
-                'debitSR' => 'nullable|numeric',
-                'credit' => 'nullable|numeric',
-                'creditSR' => 'nullable|numeric',
-            ]
-        );        
-
-        if ($validateDetail->fails()) {
-            return $this->sendError('Validation Error', $validateDetail->errors()->all());
-        }
-
-
-         // Save the detail data
-            $detailData = VouchersDetail::create([
-            'voucherId' => $voucher->id, // Use the master ID
+    protected function saveVoucherDetails($voucherId, $acId, Request $request, bool $debit)
+    {
+        // Save detail record
+        VouchersDetail::create([
+            'voucherId' => $voucherId,
             'uId' => $request->uId,
-            'acId' => $request->crAcId,
+            'acId' => $acId,
             'remarksDetail' => $request->remarks,
-            'debit' => $request->debit,
-            'credit' => $request->credit,
-            'debitSR' => $request->debitSR,
-            'creditSR' => $request->creditSR,
+            'debit' => $debit ? $request->debit : 0,            // If it's a debit, set debit value, else 0
+            'credit' => !$debit ? $request->credit : 0,         // If it's not a debit, set credit value, else 0
+            'debitSR' => $debit ? $request->debitSR : 0,
+            'creditSR' => !$debit ? $request->creditSR : 0,
         ]);
-
-        // return $this->sendResponse($data, 'Vouchers Created Successfully');
-        return $this->sendResponse([$voucher, $detailData], 'Vouchers Created Successfully');
     }
 
     /**

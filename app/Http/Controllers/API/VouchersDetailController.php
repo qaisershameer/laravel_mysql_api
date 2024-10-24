@@ -14,10 +14,34 @@ class VouchersDetailController extends BaseController
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data['vouchers'] = VouchersDetail::all();        
-        return $this->sendResponse($data, 'All Vouchers Data');
+        $uId = $request->uId;
+        $voucherPrefix = $request->voucherPrefix;
+
+        $data['vouchersdetail'] = Vouchers::select('vouchers.voucherId',
+                                            'vouchers.voucherDate',
+                                            'vouchers.voucherPrefix',
+                                            'vouchers.remarksMaster',
+                                            'vouchers.sumDebit',
+                                            'vouchers.sumCredit',
+                                            'vouchers.sumDebitSR',
+                                            'vouchers.sumCreditSR',
+                                            'vouchers.uId',
+                                            'vouchersdetail.remarksDetail',
+                                            'vouchersdetail.debit', 
+                                            'vouchersdetail.credit',
+                                            'vouchersdetail.debitSR',
+                                            'vouchersdetail.creditSR',
+                                            'vouchersdetail.acId',
+                                            'accounts.acTitle')
+                                        ->leftJoin('vouchersdetail', 'vouchers.voucherId', '=', 'vouchersdetail.voucherId')
+                                        ->leftJoin('accounts', 'vouchersdetail.acId', '=', 'accounts.acId')
+                                        ->where('vouchers.uId', $uId)
+                                        ->where('vouchers.voucherPrefix', $voucherPrefix)
+                                        ->orderBy('vouchers.voucherDate')
+                                        ->get();
+            
     }
 
     /**
