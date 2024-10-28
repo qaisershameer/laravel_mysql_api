@@ -40,9 +40,11 @@ class VouchersController extends BaseController
                                             'vouchersdetail.debitSR',
                                             'vouchersdetail.creditSR',
                                             'vouchersdetail.acId',
-                                            'accounts.acTitle')
+                                            'accounts.acTitle',
+                                            'accType.accTypeTitle')
                                         ->leftJoin('vouchersdetail', 'vouchers.voucherId', '=', 'vouchersdetail.voucherId')
                                         ->leftJoin('accounts', 'vouchersdetail.acId', '=', 'accounts.acId')
+                                        ->leftJoin('accType', 'accounts.accTypeId', '=', 'accType.accTypeId')
                                         ->where('vouchers.uId', $uId)
                                         ->where('vouchers.voucherPrefix', $voucherPrefix)
                                         ->orderBy('vouchers.voucherDate')
@@ -169,17 +171,47 @@ class VouchersController extends BaseController
             return $this->sendError('Validation Error', $validateVouchers->errors()->all());
         }
 
-        $data = Vouchers::where(['voucherId' => $id])->update([
-            'voucherDate' => $request->voucherDate,
-            'voucherPrefix' => $request->voucherPrefix,
-            'remarksMaster' => $request->remarksMaster,
-            'sumDebit' => $request->sumDebit,
-            'sumCredit' => $request->sumCredit,
-            'sumDebitSR' => $request->sumDebitSR,
-            'sumCreditSR' => $request->sumCreditSR,            
-            'uId' => $request->uId,            
-        ]);
-        return $this->sendResponse($data, 'Vouchers Updated Successfully');
+        $dataDetail = VouchersDetail::where('voucherId', $id)->delete();    // delete all details entry on update on behalf of voucherId        
+
+        $voucherDate = $request->voucherDate;        
+        // $formattedDate = Carbon::createFromFormat('d-m-Y', $voucherDate)->format('Y-m-d');
+        $formattedDate = Carbon::parse($request->voucherDate)->format('Y-m-d');
+
+        DB::beginTransaction();
+        try {
+
+            $voucher = Vouchers::where(['voucherId' => $id])->update([
+                'voucherDate' => $formattedDate,
+                'voucherPrefix' => $request->voucherPrefix,
+                'remarksMaster' => $request->remarks,
+                'sumDebit' => $request->debit,
+                'sumCredit' => $request->credit,
+                'sumDebitSR' => $request->debitSR,
+                'sumCreditSR' => $request->creditSR,
+                'uId' => $request->uId,
+            ]);
+                    
+            // Call the function to save voucher details
+            if($request->drAcId != 0){
+                $this->saveVoucherDetails($id, $request->drAcId, $request, true);   // true for debit entry
+            }
+
+            if($request->crAcId != 0){
+                $this->saveVoucherDetails($id, $request->crAcId, $request, false);  // false for credit entry
+            }
+            
+            // Retrieve the saved details
+            $voucherDetails = VouchersDetail::where('voucherId', $id)->get();
+
+            DB::commit(); // Only commit if both succeed
+
+            return $this->sendResponse([$voucher, $voucherDetails], 'Voucher Updated Successfully');            
+            
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->sendError('Database Error', $e->getMessage());
+        }
+        
     }
 
     /**
@@ -187,6 +219,8 @@ class VouchersController extends BaseController
      */
     public function destroy(string $id)
     {
+        
+        $dataDetail = VouchersDetail::where('voucherId', $id)->delete();
         $data = Vouchers::where('voucherId', $id)->delete();
 
         return $this->sendResponse($data, 'Vouchers Deleted Successfully');
