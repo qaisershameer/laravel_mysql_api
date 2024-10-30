@@ -15,13 +15,21 @@ return new class extends Migration
             $table->id('voucherId');
             $table->date('voucherDate');
             $table->string('voucherPrefix');
-            $table->text('remarksMaster')->nullable(); // Make email nullable;
+            $table->text('remarks')->nullable(); // Make email nullable;
 
-            $table->double('sumDebit')->default(0);
-            $table->double('sumCredit')->default(0);
+            $table->unsignedBigInteger('drAcId')->nullable();
+            // Add the foreign key constraint with restrict on delete
+            $table->foreign('drAcId')->references('acId')->on('accounts')->onDelete('restrict'); // Prevent deletion if foreign key exists            
             
-            $table->double('sumDebitSR')->default(0);
-            $table->double('sumCreditSR')->default(0);
+            $table->unsignedBigInteger('crAcId')->nullable();
+            // Add the foreign key constraint with restrict on delete
+            $table->foreign('crAcId')->references('acId')->on('accounts')->onDelete('restrict'); // Prevent deletion if foreign key exists            
+
+            $table->double('debit')->default(0);
+            $table->double('credit')->default(0);
+            
+            $table->double('debitSR')->default(0);
+            $table->double('creditSR')->default(0);
             
             $table->unsignedBigInteger('uId');
             // Add the foreign key constraint with restrict on delete

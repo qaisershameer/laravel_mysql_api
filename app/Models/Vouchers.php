@@ -13,7 +13,7 @@ class Vouchers extends Model
     protected $primaryKey ='voucherId';
 
     protected $fillable = [
-        'voucherDate', 'voucherPrefix', 'remarksMaster', 'sumDebit', 'sumCredit', 'sumDebitSR', 'sumCreditSR', 'uId'
+        'voucherDate', 'voucherPrefix', 'remarks', 'drAcId', 'crAcId', 'debit', 'credit', 'debitSR', 'creditSR', 'uId'
     ];
         
 }
