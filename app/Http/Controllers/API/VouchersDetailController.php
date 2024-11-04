@@ -5,9 +5,9 @@ namespace App\Http\Controllers\API;
 use App\Models\VouchersDetail;                        // change this and below all lines
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\API\BaseController as BaseController;
-
 
 class VouchersDetailController extends BaseController
 {

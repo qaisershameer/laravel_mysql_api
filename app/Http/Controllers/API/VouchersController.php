@@ -7,11 +7,10 @@ use App\Models\Vouchers;
 use App\Models\VouchersDetail;                 
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-
 use App\Http\Controllers\API\BaseController as BaseController;
 
 

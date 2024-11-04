@@ -6,11 +6,10 @@ use Carbon\Carbon;
 use App\Models\Vouchers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-
 use App\Http\Controllers\API\BaseController as BaseController;
 
 class LedgerController extends BaseController
@@ -56,8 +55,8 @@ class LedgerController extends BaseController
                                                 ->orWhere('vouchers.crAcId', $acId);
                                             })                                            
                                             ->whereBetween('vouchers.voucherDate', [$formatFrom, $formatTo])
-                                            ->orderBy('vouchers.voucherDate')
-                                            ->orderBy('vouchers.updated_at')
+                                            ->orderBy('vouchers.voucherDate', 'desc')
+                                            ->orderBy('vouchers.updated_at', 'desc')
                                             ->get();
                 
             return $this->sendResponse($data, 'AC Ledger Vouchers Data');

@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\API;
 
 use Carbon\Carbon;
-use App\Models\Vouchers;                        
+use App\Models\Vouchers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
-use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
 
+use App\Http\Controllers\Controller;
 use App\Http\Controllers\API\BaseController as BaseController;
 
 class CashBookController extends BaseController
@@ -53,8 +53,8 @@ class CashBookController extends BaseController
                                             ->whereIn('vouchers.voucherPrefix', ['CR', 'CP'])
                                             ->whereBetween('vouchers.voucherDate', [$formatFrom, $formatTo])
                                             // ->where('vouchers.voucherPrefix', $voucherPrefix)
-                                            ->orderBy('vouchers.voucherDate')
-                                            ->orderBy('vouchers.updated_at')
+                                            ->orderBy('vouchers.voucherDate', 'desc')
+                                            ->orderBy('vouchers.updated_at', 'desc')
                                             ->get();
                 
             return $this->sendResponse($data, 'Cash Book Vouchers Data');

@@ -16,6 +16,7 @@ use App\Http\Controllers\API\VouchersDetailController;
 
 use App\Http\Controllers\API\CashBookController;
 use App\Http\Controllers\API\LedgerController;
+use App\Http\Controllers\API\TrialController;
 
 // For AuthController Fucntions Calling. 1- Signup, 2- Login
 Route::post('signup', [AuthController::class, 'signup']);
@@ -38,5 +39,6 @@ Route::middleware('auth:sanctum')->group(function()
 
     Route::apiResource('cashbook', CashBookController::class);
     Route::apiResource('acledger', LedgerController::class);
+    Route::apiResource('trail', TrialController::class);
 
 });
