@@ -22,6 +22,8 @@ use App\Http\Controllers\API\TrialController;
 Route::post('signup', [AuthController::class, 'signup']);
 Route::post('login', [AuthController::class, 'login']);
 
+Route::apiResource('area', AreaController::class);
+
 // For Group Function Calling Same Resource like Sanctum
 Route::middleware('auth:sanctum')->group(function()
 {
@@ -29,7 +31,7 @@ Route::middleware('auth:sanctum')->group(function()
 
     Route::apiResource('posts', PostController::class);
     Route::apiResource('currency', CuurencyController::class);
-    Route::apiResource('area', AreaController::class);
+    // Route::apiResource('area', AreaController::class);
     Route::apiResource('accType', AccTypeController::class);
     Route::apiResource('accParent', AccParentController::class);
     Route::apiResource('accounts', AccountsController::class);

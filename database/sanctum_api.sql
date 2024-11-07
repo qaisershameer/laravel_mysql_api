@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 26, 2024 at 08:23 AM
+-- Generation Time: Nov 07, 2024 at 09:34 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -55,10 +55,10 @@ INSERT INTO `accounts` (`acId`, `acTitle`, `email`, `mobile`, `openingBal`, `Cur
 (6, 'Muhmmad Muzamil', 'muhmmadmuzamil@gmail.com', '+923346013608', 0, 0, 1, 2, 2, 1, 4, '2024-10-16 02:10:47', '2024-10-17 03:50:00'),
 (7, 'Mujahid Ameen', 'mujahidameen@gmail.com', '+923346013608', 0, 0, 1, 2, 1, 1, 2, '2024-10-16 02:17:56', '2024-10-17 03:01:22'),
 (12, 'Faizan Ayub', 'faizanayub@gmail.com', '+923346013608', 0, 0, 1, 1, 1, 1, 4, '2024-10-17 02:24:40', '2024-10-17 02:24:40'),
-(13, 'ABL', 'abl@gmail.com', '+923346013608', 0, 0, 1, 1, 3, 1, 4, '2024-10-17 03:42:41', '2024-10-17 03:42:41'),
-(15, 'HMB', 'hmb@gmail.com', '+923346013608', 0, 0, 1, 1, 3, 1, 4, '2024-10-17 03:43:11', '2024-10-17 03:43:11'),
-(16, 'UBL', 'ubl@gmail.com', '+923346013608', 0, 0, 1, 1, 3, 1, 4, '2024-10-17 03:43:23', '2024-10-17 03:43:23'),
-(17, 'HBL', 'hbl@gmail.com', '+923346013608', 0, 0, 1, 1, 3, 1, 4, '2024-10-17 03:49:49', '2024-10-17 03:49:49'),
+(13, 'ABL.', 'abl.@gmail.com', '+923346013608', 0, 0, 1, 1, 3, 1, 4, '2024-10-17 03:42:41', '2024-10-26 03:30:00'),
+(15, 'HMB.', 'hmb.@gmail.com', '+923346013608', 0, 0, 1, 1, 3, 1, 4, '2024-10-17 03:43:11', '2024-10-26 03:30:16'),
+(16, 'UBL.', 'ubl.@gmail.com', '+923346013608', 0, 0, 1, 1, 3, 1, 4, '2024-10-17 03:43:23', '2024-10-26 03:30:27'),
+(17, 'HBL.', 'hbl.@gmail.com', '+923346013608', 0, 0, 1, 1, 3, 1, 4, '2024-10-17 03:49:49', '2024-10-26 03:30:09'),
 (18, 'Danish Kaneria', 'danishkaneria@gmail.com', '+923346013608', 0, 0, 1, 1, 1, 1, 1, '2024-10-17 03:53:03', '2024-10-17 03:53:03');
 
 -- --------------------------------------------------------
@@ -212,8 +212,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (7, '2024_09_26_064655_create_accType_table', 1),
 (8, '2024_09_26_064659_create_accParent_table', 1),
 (9, '2024_09_26_064710_create_accounts_table', 1),
-(10, '2024_09_26_064726_create_vouchers_table', 1),
-(11, '2024_09_26_064812_create_vouchersdetail_table', 1);
+(14, '2024_09_26_064726_create_vouchers_table', 2),
+(15, '2024_09_26_064812_create_vouchersdetail_table', 2);
 
 -- --------------------------------------------------------
 
@@ -240,7 +240,7 @@ CREATE TABLE `personal_access_tokens` (
 
 INSERT INTO `personal_access_tokens` (`id`, `tokenable_type`, `tokenable_id`, `name`, `token`, `abilities`, `last_used_at`, `expires_at`, `created_at`, `updated_at`) VALUES
 (1, 'App\\Models\\User', 1, 'API Token', '81b370e48c0b6788b90d7ca7a6ba09a5550d164bbb0e56b0969c1d9460c16608', '[\"*\"]', NULL, NULL, '2024-10-09 01:01:17', '2024-10-09 01:01:17'),
-(2, 'App\\Models\\User', 1, 'API Token', '1e47c6b131d176e2286ab6d3a2544883d2cfddcd665523b3a001491506c3c8b8', '[\"*\"]', '2024-10-24 03:29:14', NULL, '2024-10-09 01:03:24', '2024-10-24 03:29:14');
+(2, 'App\\Models\\User', 1, 'API Token', '1e47c6b131d176e2286ab6d3a2544883d2cfddcd665523b3a001491506c3c8b8', '[\"*\"]', '2024-11-07 03:32:58', NULL, '2024-10-09 01:03:24', '2024-11-07 03:32:58');
 
 -- --------------------------------------------------------
 
@@ -289,11 +289,13 @@ CREATE TABLE `vouchers` (
   `voucherId` bigint(20) UNSIGNED NOT NULL,
   `voucherDate` date NOT NULL,
   `voucherPrefix` varchar(255) NOT NULL,
-  `remarksMaster` text DEFAULT NULL,
-  `sumDebit` double NOT NULL DEFAULT 0,
-  `sumCredit` double NOT NULL DEFAULT 0,
-  `sumDebitSR` double NOT NULL DEFAULT 0,
-  `sumCreditSR` double NOT NULL DEFAULT 0,
+  `remarks` text DEFAULT NULL,
+  `drAcId` bigint(20) UNSIGNED DEFAULT NULL,
+  `crAcId` bigint(20) UNSIGNED DEFAULT NULL,
+  `debit` double NOT NULL DEFAULT 0,
+  `credit` double NOT NULL DEFAULT 0,
+  `debitSR` double NOT NULL DEFAULT 0,
+  `creditSR` double NOT NULL DEFAULT 0,
   `uId` bigint(20) UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -303,37 +305,20 @@ CREATE TABLE `vouchers` (
 -- Dumping data for table `vouchers`
 --
 
-INSERT INTO `vouchers` (`voucherId`, `voucherDate`, `voucherPrefix`, `remarksMaster`, `sumDebit`, `sumCredit`, `sumDebitSR`, `sumCreditSR`, `uId`, `created_at`, `updated_at`) VALUES
-(1, '2024-10-24', 'CR', 'Cash Received.', 0, 600, 0, 6, 1, '2024-10-24 03:05:22', '2024-10-24 03:05:22'),
-(2, '2024-10-24', 'CR', 'Cash Received.', 0, 1000, 0, 10, 1, '2024-10-24 03:10:07', '2024-10-24 03:10:07');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `vouchersdetail`
---
-
-CREATE TABLE `vouchersdetail` (
-  `voucherDtid` bigint(20) UNSIGNED NOT NULL,
-  `voucherId` bigint(20) UNSIGNED NOT NULL,
-  `uId` bigint(20) UNSIGNED NOT NULL,
-  `acId` bigint(20) UNSIGNED NOT NULL,
-  `remarksDetail` text NOT NULL,
-  `debit` double NOT NULL DEFAULT 0,
-  `credit` double NOT NULL DEFAULT 0,
-  `debitSR` double NOT NULL DEFAULT 0,
-  `creditSR` double NOT NULL DEFAULT 0,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `vouchersdetail`
---
-
-INSERT INTO `vouchersdetail` (`voucherDtid`, `voucherId`, `uId`, `acId`, `remarksDetail`, `debit`, `credit`, `debitSR`, `creditSR`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, 13, 'Cash Received.', 0, 600, 0, 6, '2024-10-24 03:05:22', '2024-10-24 03:05:22'),
-(2, 2, 1, 17, 'Cash Received.', 0, 1000, 0, 10, '2024-10-24 03:10:07', '2024-10-24 03:10:07');
+INSERT INTO `vouchers` (`voucherId`, `voucherDate`, `voucherPrefix`, `remarks`, `drAcId`, `crAcId`, `debit`, `credit`, `debitSR`, `creditSR`, `uId`, `created_at`, `updated_at`) VALUES
+(1, '2024-10-30', 'CR', 'Cash Received.', NULL, 3, 0, 100, 0, 1, 1, '2024-10-30 01:18:07', '2024-10-30 01:18:07'),
+(2, '2024-10-30', 'CR', 'Cash Received.', NULL, 18, 0, 200, 0, 2, 1, '2024-10-30 01:19:27', '2024-10-30 01:19:27'),
+(3, '2024-10-30', 'CP', 'Cash Paid.', 12, NULL, 300, 0, 3, 0, 1, '2024-10-30 01:20:39', '2024-10-30 01:20:39'),
+(4, '2024-10-30', 'CP', 'Cash Paid.', 7, NULL, 400, 0, 4, 0, 1, '2024-10-30 01:20:52', '2024-10-30 01:20:52'),
+(5, '2024-10-30', 'JV', 'Amount Transferred.', 6, 4, 900, 800, 9, 8, 1, '2024-10-30 01:34:27', '2024-10-30 01:41:12'),
+(6, '2024-10-29', 'CR', 'Cash Received.', NULL, 13, 0, 2000, 0, 20, 1, '2024-10-30 02:37:02', '2024-10-30 02:37:02'),
+(7, '2024-10-29', 'CR', 'Cash Received.', NULL, 17, 0, 2100, 0, 21, 1, '2024-10-30 02:37:28', '2024-10-30 02:37:28'),
+(8, '2024-10-29', 'CP', 'Cash Paid.', 15, NULL, 1500, 0, 15, 0, 1, '2024-10-30 02:37:57', '2024-10-30 02:37:57'),
+(9, '2024-10-29', 'CP', 'Cash Paid.', 16, NULL, 1600, 0, 16, 0, 1, '2024-10-30 02:38:28', '2024-10-30 02:38:28'),
+(10, '2024-10-31', 'CR', 'Cash Received.', NULL, 6, 0, 500, 0, 5, 1, '2024-10-31 02:48:08', '2024-10-31 02:48:08'),
+(11, '2024-10-31', 'CP', 'Cash Paid.', 6, NULL, 400, 0, 4, 0, 1, '2024-10-31 02:48:21', '2024-10-31 02:48:21'),
+(12, '2024-11-07', 'JV', 'Cash Paid.', 6, 15, 50, 50, 5, 5, 1, '2024-11-07 01:26:28', '2024-11-07 01:26:28'),
+(13, '2024-11-07', 'CP', 'Cash Paid.', 13, NULL, 1200, 0, 12, 0, 1, '2024-11-07 02:40:40', '2024-11-07 02:40:40');
 
 --
 -- Indexes for dumped tables
@@ -423,16 +408,9 @@ ALTER TABLE `users`
 --
 ALTER TABLE `vouchers`
   ADD PRIMARY KEY (`voucherId`),
+  ADD KEY `vouchers_dracid_foreign` (`drAcId`),
+  ADD KEY `vouchers_cracid_foreign` (`crAcId`),
   ADD KEY `vouchers_uid_foreign` (`uId`);
-
---
--- Indexes for table `vouchersdetail`
---
-ALTER TABLE `vouchersdetail`
-  ADD PRIMARY KEY (`voucherDtid`),
-  ADD KEY `vouchersdetail_voucherid_foreign` (`voucherId`),
-  ADD KEY `vouchersdetail_uid_foreign` (`uId`),
-  ADD KEY `vouchersdetail_acid_foreign` (`acId`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -472,7 +450,7 @@ ALTER TABLE `currency`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
@@ -496,13 +474,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `vouchers`
 --
 ALTER TABLE `vouchers`
-  MODIFY `voucherId` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
--- AUTO_INCREMENT for table `vouchersdetail`
---
-ALTER TABLE `vouchersdetail`
-  MODIFY `voucherDtid` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `voucherId` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- Constraints for dumped tables
@@ -547,15 +519,9 @@ ALTER TABLE `currency`
 -- Constraints for table `vouchers`
 --
 ALTER TABLE `vouchers`
+  ADD CONSTRAINT `vouchers_cracid_foreign` FOREIGN KEY (`crAcId`) REFERENCES `accounts` (`acId`),
+  ADD CONSTRAINT `vouchers_dracid_foreign` FOREIGN KEY (`drAcId`) REFERENCES `accounts` (`acId`),
   ADD CONSTRAINT `vouchers_uid_foreign` FOREIGN KEY (`uId`) REFERENCES `users` (`id`);
-
---
--- Constraints for table `vouchersdetail`
---
-ALTER TABLE `vouchersdetail`
-  ADD CONSTRAINT `vouchersdetail_acid_foreign` FOREIGN KEY (`acId`) REFERENCES `accounts` (`acId`),
-  ADD CONSTRAINT `vouchersdetail_uid_foreign` FOREIGN KEY (`uId`) REFERENCES `users` (`id`),
-  ADD CONSTRAINT `vouchersdetail_voucherid_foreign` FOREIGN KEY (`voucherId`) REFERENCES `vouchers` (`voucherId`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

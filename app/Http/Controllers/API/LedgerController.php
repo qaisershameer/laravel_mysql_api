@@ -43,7 +43,7 @@ class LedgerController extends BaseController
                                                 'accType_dr.accTypeTitle as drAcTypeTitle',
                                                 'accounts_cr.acTitle as crAcTitle',
                                                 'accType_cr.accTypeTitle as crAcTypeTitle')
-                                                ->leftJoin('vouchersdetail', 'vouchers.voucherId', '=', 'vouchersdetail.voucherId')
+                                                // ->leftJoin('vouchersdetail', 'vouchers.voucherId', '=', 'vouchersdetail.voucherId')
                                                 ->leftJoin('accounts as accounts_dr', 'vouchers.drAcId', '=', 'accounts_dr.acId')
                                                 ->leftJoin('accType as accType_dr', 'accounts_dr.accTypeId', '=', 'accType_dr.accTypeId')
                                                 ->leftJoin('accounts as accounts_cr', 'vouchers.crAcId', '=', 'accounts_cr.acId')

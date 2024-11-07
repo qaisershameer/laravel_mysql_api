@@ -42,10 +42,21 @@ class TrialController extends BaseController
                 ->leftJoin('accounts', 'vouchers.drAcId', '=', 'accounts.acId')
                 ->leftJoin('accType AS accType', 'accounts.accTypeId', '=', 'accType.accTypeId')
                 ->where('vouchers.uId', $uId)
-                ->where('accounts.areaId', $areaId)
-                ->where('accounts.accTypeId', $accTypeId)
+                // ->where('accounts.areaId', $areaId)
+                //  ->where('accounts.accTypeId', $accTypeId)
                 ->whereBetween('vouchers.voucherDate', [$formatFrom, $formatTo])
-                ->groupBy('drAcId', 'accounts.acTitle', 'accType.accTypeTitle');
+                ->groupBy('drAcId', 'accounts.acTitle', 'accType.accTypeTitle')
+                ->orderBy('accounts.acTitle', 'desc');
+
+                // Conditionally add the accTypeId filter if it's not 'ALL'
+                if ($accTypeId !== 'ALL') {
+                    $debits = $debits->where('accounts.accTypeId', $accTypeId);
+                }
+
+                // Conditionally add the areaId filter if it's not 'ALL'
+                if ($areaId !== 'ALL') {
+                    $debits = $debits->where('accounts.areaId', $areaId);
+                }
 
         // Query for credit sums
         $credits = Vouchers::select(
@@ -60,10 +71,44 @@ class TrialController extends BaseController
                 ->leftJoin('accounts', 'vouchers.crAcId', '=', 'accounts.acId')
                 ->leftJoin('accType', 'accounts.accTypeId', '=', 'accType.accTypeId')
                 ->where('vouchers.uId', $uId)
-                ->where('accounts.areaId', $areaId)
-                ->where('accounts.accTypeId', $accTypeId)
+                // ->where('accounts.areaId', $areaId)
+                // ->where('accounts.accTypeId', $accTypeId)
                 ->whereBetween('vouchers.voucherDate', [$formatFrom, $formatTo])
-                ->groupBy('crAcId', 'accounts.acTitle', 'accType.accTypeTitle');
+                ->groupBy('crAcId', 'accounts.acTitle', 'accType.accTypeTitle')
+                ->orderBy('accounts.acTitle', 'desc');
+
+                // Conditionally add the accTypeId filter if it's not 'ALL'
+                if ($accTypeId !== 'ALL') {
+                    $credits = $credits->where('accounts.accTypeId', $accTypeId);
+                }
+
+                // Conditionally add the areaId filter if it's not 'ALL'
+                if ($areaId !== 'ALL') {
+                    $credits = $credits->where('accounts.areaId', $areaId);
+                }                
+
+
+                                // // Print the SQL query for the debit query
+                                // \Log::info($debits->toSql()); // Logs only the SQL query without bindings
+                                // \Log::info($debits->getBindings()); // Logs the bindings used in the query
+
+                                // // Or simply output the complete query including bindings for debug purposes
+                                // $query = $debits->toSql();
+                                // $bindings = $debits->getBindings();
+                                // $fullQuery = vsprintf(str_replace("?", "'%s'", $query), $bindings);
+                                // \Log::info($fullQuery); // Logs the full query with bindings
+
+                                // // For the credits query
+                                // \Log::info($credits->toSql()); // Logs only the SQL query without bindings
+                                // \Log::info($credits->getBindings()); // Logs the bindings
+
+                                // // Combine query and bindings for credits
+                                // $query = $credits->toSql();
+                                // $bindings = $credits->getBindings();
+                                // $fullQuery = vsprintf(str_replace("?", "'%s'", $query), $bindings);
+                                // \Log::info($fullQuery); // Logs the full query with bindings
+
+
 
             // Combine both queries using union
             $debitResults = $debits->get();  // Get results for debits
@@ -77,8 +122,13 @@ class TrialController extends BaseController
                 return $item->acId; // Group by acId
             });
 
+            // Sort the results by acTitle (after grouping)
+            $sortedResults = $groupedResults->sortBy(function ($item) {
+                return $item->first()->acTitle; // Sort by acTitle of the first item in each group
+            });
+
             // Prepare final data
-            $data['vouchers'] = $groupedResults->map(function ($items, $key) {
+            $data['vouchers'] = $sortedResults->map(function ($items, $key) {
                 return [
                     'acId' => $key,
                     'acTitle' => $items->first()->acTitle,
